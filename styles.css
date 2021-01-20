@@ -1,0 +1,27 @@
+.parent {
+   width: 507px;
+   height: 507px;
+    margin: 50px auto auto auto;
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+}
+
+.box {
+    width: 169px;
+    height: 169px;;
+    
+}
+
+.border-bottom {
+    border-bottom: 2px black solid;
+    box-sizing: border-box;
+}
+
+.border-right {
+    border-right: 2px black solid;
+    box-sizing: border-box;
+}
