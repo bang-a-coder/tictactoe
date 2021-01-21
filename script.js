@@ -8,14 +8,15 @@ const Gameboard = (() => {
             if (e.target.innerHTML != ``) return
             e.target.innerHTML = totem
             if (totem === `X`) {totem = `O`} else {totem = `X`}
+            Gameboard.gameCheck()
         }))
 
     const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
 
     const gameCheck = () => {
-        if (verticalCheck(grid)) {return verticalCheck(grid) + ` won!`}
-        if (horizontalCheck(grid)) {return horizontalCheck(grid) + `won`}
-        if (diagonalCheck(grid)) {return diagonalCheck(grid) + ` won`}
+        if (verticalCheck(grid)) {alert( verticalCheck(grid) + ` won!`)}
+        if (horizontalCheck(grid)) {alert(horizontalCheck(grid) + `won`)}
+        if (diagonalCheck(grid)) {alert(diagonalCheck(grid) + ` won`)}
     }
 
     return {grid, clear, gameCheck}
@@ -54,33 +55,3 @@ function diagonalCheck(arr){
 clearButton.addEventListener(`click`, function() {
     Gameboard.clear()
 })
-
-
-
-
-// function renderGrid() {
-//     let elements = Gameboard.grid
-//     ticker = 0
-//     elements.forEach(element => {
-//         if (ticker === 0) {
-//             element.innerHTML = `X`
-//             ticker++
-//         } else {
-//             element.innerHTML = `O`
-//             ticker--
-//         }
-//     })
-
-// }
-
-// console.log(e.target.id)
-// console.log(e.target)
-
-
-// function getIndexesOF(arr, value) {
-//     return arr.reduce(function (a, e, i) {
-//         if (e.innerHTML === value)
-//             a.push(i);
-//         return a;
-//     }, [])
-// }
