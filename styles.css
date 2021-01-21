@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
 .parent {
    width: 507px;
    height: 507px;
@@ -12,8 +14,11 @@
 
 .box {
     width: 169px;
-    height: 169px;;
-    
+    height: 169px;
+    text-align: center;
+    line-height: 169px;
+    font-size: 50px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .border-bottom {
@@ -24,4 +29,19 @@
 .border-right {
     border-right: 2px black solid;
     box-sizing: border-box;
+}
+
+.clear-button {
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    margin: auto;
+    border: 1px black solid;
+    border-radius: 8px;
+    line-height: 40px;
+    margin-top: 40px;
+    cursor: pointer;
+    user-select: none;
 }

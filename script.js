@@ -1,13 +1,26 @@
-const boxes = document.querySelectorAll(`.box`)
+const clearButton = document.querySelector(`.clear-button`)
 
-boxes.forEach(element => element.addEventListener(`click`, function(e){
-    console.log(e.target.id)
-}))
+let totem = `X`
 
 const Gameboard = (() => {
-    const grid = boxes
-    
-    return {grid}
+    const grid =  Array.from(document.querySelectorAll(`.box`))
+        grid.forEach(element => element.addEventListener(`click`, function (e) {
+            if (e.target.innerHTML != ``) return
+            e.target.innerHTML = totem
+            if (totem === `X`) {totem = `O`} else {totem = `X`}
+        }))
+
+    const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
+
+    const gameCheck = () => {
+        console.log(getIndexesOF(grid, totem))
+        let locations = getIndexesOF(grid, totem)
+        for (i=0; i<locations.length; i++){
+            
+        }
+    }
+
+    return {grid, clear, gameCheck}
 })()
 
 const Human = () => {
@@ -15,19 +28,36 @@ const Human = () => {
     return {age}
 }
 
-function renderGrid() {
-    let elements = Gameboard.grid
-    ticker = 0
-    elements.forEach(element => {
-        if (ticker === 0) {
-            element.innerHTML = `X`
-            ticker++
-        } else {
-            element.innerHTML = `O`
-            ticker--
-        }
-    })
-    
+function getIndexesOF(arr, value){
+    return arr.reduce(function (a, e, i) {
+        console.log(a)
+        if (e.innerHTML === value)
+            a.push(i);
+        return a;
+    }, [])
 }
 
-renderGrid()
+
+
+clearButton.addEventListener(`click`, function() {
+    Gameboard.clear()
+})
+
+
+// function renderGrid() {
+//     let elements = Gameboard.grid
+//     ticker = 0
+//     elements.forEach(element => {
+//         if (ticker === 0) {
+//             element.innerHTML = `X`
+//             ticker++
+//         } else {
+//             element.innerHTML = `O`
+//             ticker--
+//         }
+//     })
+
+// }
+
+// console.log(e.target.id)
+// console.log(e.target)
