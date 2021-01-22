@@ -13,10 +13,11 @@ const Gameboard = (() => {
 
     const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
 
+    let checker = (arr, target) => target.every(v => arr.includes(v));
+
     const gameCheck = () => {
-        if (verticalCheck(grid)) {alert( verticalCheck(grid) + ` won!`)}
-        if (horizontalCheck(grid)) {alert(horizontalCheck(grid) + `won`)}
-        if (diagonalCheck(grid)) {alert(diagonalCheck(grid) + ` won`)}
+        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `X`), arr)) alert(`X WON`)})
+        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) alert(`O WON`)})
     }
 
     return {grid, clear, gameCheck}
@@ -27,31 +28,39 @@ const Human = () => {
     return {age}
 }
 
-function verticalCheck(arr){
-    for (i = 0; i < 3; i++) {
-        if (arr[i].innerHTML === arr[i + 3].innerHTML && arr[i].innerHTML === arr[i + 6].innerHTML) {
-            return  arr[i].innerHTML
-        }
-    }
-}
-
-function horizontalCheck(arr){
-    for (i = 0; i < 6; i += 3) {
-        if (arr[i].innerHTML === arr[i + 1].innerHTML && arr[i].innerHTML === arr[i + 2].innerHTML) {
-            return arr[i].innerHTML
-        }
-    }
-}
-
-function diagonalCheck(arr){
-    if (arr[0].innerHTML === arr[4].innerHTML && arr[0].innerHTML === arr[8].innerHTML){
-        return arr[0].innerHTML
-    } else if (arr[2].innerHTML === arr[4].innerHTML && arr[2].innerHTML === arr[6].innerHTML){
-        return arr[2].innerHTML
-    }
-}
-
+const winLookUp = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7,],[2,5,8],
+    [0,4,8],[2,4,6]
+]
 
 clearButton.addEventListener(`click`, function() {
     Gameboard.clear()
 })
+
+function getIndexesOF(arr, value) {
+    return arr.reduce(function (a, e, i) {
+        if (e.innerHTML === value)
+            a.push(i);
+        return a;
+    }, [])
+}
+
+
+// function renderGrid() {
+//     let elements = Gameboard.grid
+//     ticker = 0
+//     elements.forEach(element => {
+//         if (ticker === 0) {
+//             element.innerHTML = `X`
+//             ticker++
+//         } else {
+//             element.innerHTML = `O`
+//             ticker--
+//         }
+//     })
+
+// }
+
+// console.log(e.target.id)
+// console.log(e.target)
