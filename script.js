@@ -1,4 +1,5 @@
 const clearButton = document.querySelector(`.clear-button`)
+const formPopUp = document.querySelector(`.form-popup`)
 
 let totem = `X`
 
@@ -13,7 +14,7 @@ const Gameboard = (() => {
 
     const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
 
-    let checker = (arr, target) => target.every(v => arr.includes(v));
+    const checker = (arr, target) => target.every(v => arr.includes(v));
 
     const gameCheck = () => {
         winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `X`), arr)) alert(`X WON`)})
@@ -23,10 +24,15 @@ const Gameboard = (() => {
     return {grid, clear, gameCheck}
 })()
 
-const Human = () => {
-    age = 10
-    return {age}
+const Human = (name, score) => {
+    const getName = () => name
+    const getScore = () => score
+    const win = () => {score += 1}
+
+    return {getName, getScore, win}
 }
+
+let mothafucker = Human(`Motherfucker`, 0)
 
 const winLookUp = [
     [0,1,2],[3,4,5],[6,7,8],
@@ -38,13 +44,18 @@ clearButton.addEventListener(`click`, function() {
     Gameboard.clear()
 })
 
+//HELPERS
+
+function toggleForm() {formPopUp.classList.toggle(`displayN`)}
+
 function getIndexesOF(arr, value) {
     return arr.reduce(function (a, e, i) {
-        if (e.innerHTML === value)
-            a.push(i);
+        if (e.innerHTML === value) a.push(i);
         return a;
     }, [])
 }
+
+window.onload = toggleForm()
 
 
 // function renderGrid() {
