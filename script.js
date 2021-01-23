@@ -21,8 +21,14 @@ const Gameboard = (() => {
     const checker = (arr, target) => target.every(v => arr.includes(v));
 
     const gameCheck = () => {
-        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `X`), arr)) alert(`X WON`)})
-        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) alert(`O WON`)})
+        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `X`), arr)) {
+            Game.players[0].win()
+        }})
+        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) {
+            Game.players[1].win()
+        }})
+
+        //winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) alert(`O WON`)})
     }
 
     return {grid, clear, gameCheck}
@@ -36,9 +42,12 @@ const Human = (name, score, nameClass, scoreClass) => {
     const win = () => {
         score += 1
         visualScore.innerHTML = score
+        Gameboard.clear()
     }
 
-    return {getName, getScore, win}
+    const resetScore = () => {score = 0}
+
+    return {getName, getScore, win, resetScore}
 }
 
 const Game = (() => {
@@ -83,6 +92,20 @@ function getIndexesOF(arr, value) {
         return a;
     }, [])
 }
+
+// function winCheck(symbol){
+//     const checker = (arr, target) => target.every(v => arr.includes(v));
+
+//     winLookUp.forEach(arr => { 
+//         if (checker(getIndexesOF(grid, symbol), arr)) {
+//             return true
+//         }
+//     })
+
+    
+// }
+
+
 
 window.onload = toggleForm()
 
