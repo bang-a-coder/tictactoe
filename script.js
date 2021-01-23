@@ -28,10 +28,15 @@ const Gameboard = (() => {
     return {grid, clear, gameCheck}
 })()
 
-const Human = (name, score) => {
+const Human = (name, score, nameClass, scoreClass) => {
     const getName = () => name
     const getScore = () => score
-    const win = () => {score += 1}
+    document.querySelector(nameClass).innerHTML = name
+    const visualScore = document.querySelector(scoreClass)
+    const win = () => {
+        score += 1
+        visualScore.innerHTML = score
+    }
 
     return {getName, getScore, win}
 }
@@ -39,8 +44,8 @@ const Human = (name, score) => {
 const Game = (() => {
     const players = []
     const createPlayers = () => {
-        players[0] = Human(playerOneField.value, 0)
-        players[1] = Human(playerTwoField.value, 0)
+        players[0] = Human(playerOneField.value, 0, `.xPlayerName`, `.xPlayerScore`)
+        players[1] = Human(playerTwoField.value, 0, `.oPlayerName`, `.oPlayerScore`)
     }
 
 
@@ -48,7 +53,7 @@ const Game = (() => {
     return {players, createPlayers}
 })()
 
-let mothafucker = Human(`Motherfucker`, 0)
+//let mothafucker = Human(`Motherfucker`, 0)
 
 const winLookUp = [
     [0,1,2],[3,4,5],[6,7,8],
