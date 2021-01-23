@@ -1,5 +1,9 @@
 const clearButton = document.querySelector(`.clear-button`)
 const formPopUp = document.querySelector(`.form-popup`)
+const formSubmitButton = document.querySelector(`#form-submit`)
+const formContainer = document.querySelector(`.container`)
+const playerOneField = document.querySelector(`#player-one`)
+const playerTwoField = document.querySelector(`#player-two`)
 
 let totem = `X`
 
@@ -32,6 +36,18 @@ const Human = (name, score) => {
     return {getName, getScore, win}
 }
 
+const Game = (() => {
+    const players = []
+    const createPlayers = () => {
+        players[0] = Human(playerOneField.value, 0)
+        players[1] = Human(playerTwoField.value, 0)
+    }
+
+
+
+    return {players, createPlayers}
+})()
+
 let mothafucker = Human(`Motherfucker`, 0)
 
 const winLookUp = [
@@ -40,13 +56,21 @@ const winLookUp = [
     [0,4,8],[2,4,6]
 ]
 
+
+//EVENT LISTENERS
+
 clearButton.addEventListener(`click`, function() {
     Gameboard.clear()
 })
 
+formSubmitButton.addEventListener(`click`, function(){
+    Game.createPlayers()
+    toggleForm()
+} )
+
 //HELPERS
 
-function toggleForm() {formPopUp.classList.toggle(`displayN`)}
+function toggleForm() {formContainer.classList.toggle(`displayN`)}
 
 function getIndexesOF(arr, value) {
     return arr.reduce(function (a, e, i) {
