@@ -168,6 +168,10 @@
     height: 70px;
     margin: auto;
     border-radius: 50%;
-    
+}
+
+.bluecolor {
+     background-color: #7caffc !important;
+     transition: ease-in 200ms;
 }
 
