@@ -4,6 +4,7 @@ const formSubmitButton = document.querySelector(`#form-submit`)
 const formContainer = document.querySelector(`.container`)
 const playerOneField = document.querySelector(`#player-one`)
 const playerTwoField = document.querySelector(`#player-two`)
+const winPopUP = document.querySelector(`.winPopUP`)
 
 let totem = `X`
 
@@ -47,12 +48,20 @@ const Game = (() => {
     const switchIndicator = () => {players.forEach(player => player.indicate())}
 
     const gameCheck = () => {
-        if (winLookUp.tableCheck(`X`)) {alert(`X WOM`)}
-        if (winLookUp.tableCheck(`O`)) {alert(`O WOM`)}
+        if (winLookUp.tableCheck(`X`)) {winReveal(`X`),players[0].win()}
+        if (winLookUp.tableCheck(`O`)) {winReveal(`O`),players[1].win()}
 
     }
 
-    return {switchIndicator,players, createPlayers, gameCheck}
+    const winReveal = (sym) => {
+        winPopUP.innerHTML = sym + ` Won🥳`
+        toggleForm(winPopUP, `displayN`)
+        
+        setTimeout(function () { toggleForm(winPopUP, `displayN`)},1000)
+
+    }
+
+    return {switchIndicator,players, createPlayers, gameCheck, winReveal}
 })()
 
 const winLookUp = (() => {
@@ -61,16 +70,10 @@ const winLookUp = (() => {
         [0, 3, 6], [1, 4, 7,], [2, 5, 8],
         [0, 4, 8], [2, 4, 6]
     ]
-
-    const checker = (arr, target) => target.every(v => arr.includes(v));
-
     const tableCheck = (sym) => {
         let found = false 
         table.forEach(arr => {
-            if (checker(getIndexesOF(Gameboard.grid, sym), arr)) {
-                console.log(`exists`)
-                found =true
-            }
+            if (checker(getIndexesOF(Gameboard.grid, sym), arr)) {found=true}
         })
 
         return found
@@ -87,12 +90,14 @@ clearButton.addEventListener(`click`, function() {
 
 formSubmitButton.addEventListener(`click`, function(){
     Game.createPlayers()
-    toggleForm()
+    toggleForm(formContainer, `displayN`)
 } )
 
 //HELPERS
 
-function toggleForm() {formContainer.classList.toggle(`displayN`)}
+function toggleForm(elmnt, clss) {
+    elmnt.classList.toggle(clss)
+}
 
 function getIndexesOF(arr, value) {
     return arr.reduce(function (a, e, i) {
@@ -101,4 +106,8 @@ function getIndexesOF(arr, value) {
     }, [])
 }
 
-window.onload = toggleForm()
+const checker = (arr, target) => target.every(v => arr.includes(v));
+
+
+window.onload = toggleForm(formContainer, `displayN`)
+
