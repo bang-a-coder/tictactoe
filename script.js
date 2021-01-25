@@ -13,67 +13,71 @@ const Gameboard = (() => {
             if (e.target.innerHTML != ``) return
             e.target.innerHTML = totem
             if (totem === `X`) {totem = `O`} else {totem = `X`}
-            Gameboard.gameCheck()
+            Game.gameCheck()
             Game.switchIndicator()
-
-        }))
+    }))
 
     const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
 
-    const checker = (arr, target) => target.every(v => arr.includes(v));
-
-    const gameCheck = () => {
-        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `X`), arr)) {
-            Game.players[0].win()
-        }})
-        winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) {
-            Game.players[1].win()
-        }})
-
-        //winLookUp.forEach(arr => { if (checker(getIndexesOF(grid, `O`), arr)) alert(`O WON`)})
-    }
-
-    return {grid, clear, gameCheck}
+    return {grid, clear}
 })()
 
-const Human = (name, score, daddyClass, nameClass, scoreClass, sym) => {
+const Human = (name, score, daddyClass, sym) => {
     const getName = () => name
     const getScore = () => score
-    document.querySelector(nameClass).innerHTML = name
-    const visualScore = document.querySelector(scoreClass)
-
-    const parentEl = document.querySelector(daddyClass)
+    const parentElement = document.querySelector(daddyClass)
+    parentElement.querySelector(`.name`).innerHTML = name
     const win = () => {
         score += 1
-        visualScore.innerHTML = score
+        parentElement.querySelector(`.score`).innerHTML = score
         Gameboard.clear()
     }
-
-    const symbolIndicat = document.querySelector(sym)
-
-    const indicate = () => {parentEl.querySelector(`.roundthingy`).classList.toggle(`bluecolor`)}
-
+    const indicate = () => {parentElement.querySelector(`.roundthingy`).classList.toggle(`bluecolor`)}
     const resetScore = () => {score = 0}
 
-    return {getName, getScore, win, resetScore, indicate, symbolIndicat}
+    return {getName, getScore, win, resetScore, indicate}
 }
 
 const Game = (() => {
     const players = []
     const createPlayers = () => {
-        players[0] = Human(playerOneField.value, 0, `.Xplayer`,`.xPlayerName`, `.xPlayerScore`, `.Xindc`)
-        players[1] = Human(playerTwoField.value, 0,`.Oplayer` ,`.oPlayerName`, `.oPlayerScore`, `.Oindc`)
+        players[0] = Human(playerOneField.value, 0, `.Xplayer`)
+        players[1] = Human(playerTwoField.value, 0,`.Oplayer`)
     }
     const switchIndicator = () => {players.forEach(player => player.indicate())}
 
-    return {switchIndicator,players, createPlayers}
+    const gameCheck = () => {
+        if (winLookUp.tableCheck(`X`)) {alert(`X WOM`)}
+        if (winLookUp.tableCheck(`O`)) {alert(`O WOM`)}
+
+    }
+
+    return {switchIndicator,players, createPlayers, gameCheck}
 })()
 
-const winLookUp = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7,],[2,5,8],
-    [0,4,8],[2,4,6]
-]
+const winLookUp = (() => {
+    const table = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7,], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ]
+
+    const checker = (arr, target) => target.every(v => arr.includes(v));
+
+    const tableCheck = (sym) => {
+        let found = false 
+        table.forEach(arr => {
+            if (checker(getIndexesOF(Gameboard.grid, sym), arr)) {
+                console.log(`exists`)
+                found =true
+            }
+        })
+
+        return found
+    }
+
+    return {table, tableCheck}
+})()
 
 //EVENT LISTENERS
 
