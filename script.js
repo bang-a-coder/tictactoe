@@ -8,88 +8,100 @@ const winPopUP = document.querySelector(`.winPopUP`)
 
 let totem = `X`
 
-const Gameboard = (() => {
-    const grid =  Array.from(document.querySelectorAll(`.box`))
-        grid.forEach(element => element.addEventListener(`click`, function (e) {
+class Gameboard {
+    constructor(){
+        this.grid = Array.from(document.querySelectorAll(`.box`))
+    }
+
+    clear() {this.grid.forEach(element => element.innerHTML = ``)}
+
+    init(){
+        this.grid.forEach(element => element.addEventListener(`click`, function (e) {
             if (e.target.innerHTML != ``) return
             e.target.innerHTML = totem
-            if (totem === `X`) {totem = `O`} else {totem = `X`}
-            Game.gameCheck()
-            Game.switchIndicator()
-    }))
-
-    const clear = () => {Gameboard.grid.forEach(element => element.innerHTML = ``)}
-
-    return {grid, clear}
-})()
-
-const Human = (name, score, daddyClass, sym) => {
-    const getName = () => name
-    const getScore = () => score
-    const parentElement = document.querySelector(daddyClass)
-    parentElement.querySelector(`.name`).innerHTML = name
-    const win = () => {
-        score += 1
-        parentElement.querySelector(`.score`).innerHTML = score
-        Gameboard.clear()
+            if (totem === `X`) { totem = `O` } else { totem = `X` }
+            game.gameCheck()
+            game.switchIndicator()
+        }))
     }
-    const indicate = () => {parentElement.querySelector(`.roundthingy`).classList.toggle(`bluecolor`)}
-    const resetScore = () => {score = 0}
-
-    return {getName, getScore, win, resetScore, indicate}
 }
 
-const Game = (() => {
-    const players = []
-    const createPlayers = () => {
-        players[0] = Human(playerOneField.value, 0, `.Xplayer`)
-        players[1] = Human(playerTwoField.value, 0,`.Oplayer`)
-    }
-    const switchIndicator = () => {players.forEach(player => player.indicate())}
+let gameboard = new Gameboard()
+gameboard.init()
 
-    const gameCheck = () => {
-        if (winLookUp.tableCheck(`X`)) {winReveal(`X`),players[0].win()}
-        if (winLookUp.tableCheck(`O`)) {winReveal(`O`),players[1].win()}
-
+class Human {
+    constructor(namee, score, daddyClass){
+        this.namee = namee
+        this.score = score
+        this.parentElement = document.querySelector(daddyClass)
+            this.parentElement.querySelector(`.name`).innerHTML = this.namee  // NOT SURE IF IS SHOULD DO initialisation stuff here but creating a separate method just for that and then having to call it seems lame
     }
 
-    const winReveal = (sym) => {
+    win(){
+        this.score += 1
+        this.parentElement.querySelector(`.score`).innerHTML = this.score
+        gameboard.clear()
+    }
+
+    indicate() {this.parentElement.querySelector(`.roundthingy`).classList.toggle(`bluecolor`) }
+}
+
+class Game {
+    constructor(){
+        this.players = []
+    }
+
+    createPlayers(){
+        this.players[0] = new Human(playerOneField.value, 0, `.Xplayer`)
+        this.players[1] = new Human(playerTwoField.value, 0, `.Oplayer`)
+    }
+
+    switchIndicator() {this.players.forEach(player => player.indicate())}
+
+    gameCheck(){
+        if (winlookup.tableCheck(`X`)) { this.winReveal(`X`), this.players[0].win() }
+        if (winlookup.tableCheck(`O`)) { this.winReveal(`O`), this.players[1].win() }
+    }
+
+    winReveal(sym){
         winPopUP.innerHTML = sym + ` Won🥳`
         toggleForm(winPopUP, `displayN`)
-        
-        setTimeout(function () { toggleForm(winPopUP, `displayN`)},1000)
 
+        setTimeout(function () { toggleForm(winPopUP, `displayN`) }, 1000)
+    }
+}
+
+let game = new Game()
+
+class winLookUp {
+    constructor(){
+        this.table = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7,], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ]
     }
 
-    return {switchIndicator,players, createPlayers, gameCheck, winReveal}
-})()
-
-const winLookUp = (() => {
-    const table = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7,], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
-    ]
-    const tableCheck = (sym) => {
-        let found = false 
-        table.forEach(arr => {
-            if (checker(getIndexesOF(Gameboard.grid, sym), arr)) {found=true}
+    tableCheck(sym){
+        let found = false
+        this.table.forEach(arr => {
+            if (checker(getIndexesOF(gameboard.grid, sym), arr)) { found = true }
         })
 
         return found
     }
+}
 
-    return {table, tableCheck}
-})()
+let winlookup = new winLookUp()
 
 //EVENT LISTENERS
 
 clearButton.addEventListener(`click`, function() {
-    Gameboard.clear()
+    gameboard.clear()
 })
 
 formSubmitButton.addEventListener(`click`, function(){
-    Game.createPlayers()
+    game.createPlayers()
     toggleForm(formContainer, `displayN`)
 } )
 
@@ -108,6 +120,4 @@ function getIndexesOF(arr, value) {
 
 const checker = (arr, target) => target.every(v => arr.includes(v));
 
-
 window.onload = toggleForm(formContainer, `displayN`)
-
